@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Weather from './Weather';
 import './tachyons.css';
 import './prism.css';
-const API_KEY = '5cc1f25759881907aed6171543839b19';
+const API_KEY = 'ee02a2917e12d7e46a233b9f641b8eba';
 
 
 export default class App extends Component {
@@ -13,7 +13,7 @@ export default class App extends Component {
        temp: "",
        description: "" ,
        icon: "",
-       loading: false
+       error: null
     }
   }
 
@@ -33,10 +33,19 @@ export default class App extends Component {
         this.setState({
           temp: data.main.temp,
           description: data.weather[0].description,
-          icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`
+          icon: `http://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+          error: false
         })
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err)
+        this.setState({
+          temp: "--",
+          description: "Weather data unavailable",
+          icon: "",
+          error: true
+        })
+      });
   }
 
 
