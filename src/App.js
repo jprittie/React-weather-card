@@ -29,7 +29,18 @@ export default class App extends Component {
   getWeather = () => {
     return fetch(`http://api.openweathermap.org/data/2.5/weather?id=6167865&appid=${API_KEY}&units=metric`)
       .then(res => res.json())
+      .then(response => {
+        //console.log(response);
+        if (response.cod !== 200) {
+          throw {
+            message: "Error thrown",
+            status: response.cod
+          }
+        }
+        return response;
+      })
       .then(data => {
+ 
         this.setState({
           temp: data.main.temp,
           description: data.weather[0].description,
@@ -38,7 +49,7 @@ export default class App extends Component {
         })
       })
       .catch(err => {
-        console.error(err)
+        console.error(err.message, err.status)
         this.setState({
           temp: "--",
           description: "Weather data unavailable",
